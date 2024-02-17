@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 
-mongoose.connect('mongodb+srv://admin:Souvik1999@cluster0demo.qwvwdf2.mongodb.net/paytmDB');
+mongoose.connect('url');
 const PaytmUser = mongoose.model('User', new mongoose.Schema({
     firstName: String,
     lastName:String,
