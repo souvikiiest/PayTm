@@ -21,22 +21,18 @@ router.post("/transfer", AuthMiddleware,async(req,res)=>{
     {
         return res.status(400).send(" Insufficient funds")
     }
-    const toUser =  Accounts.findOne({userId:to});
+    const toUser =  await Accounts.findOne({userId:to});
     if(!toUser){
         return res.status(400).send("User doesn't exist");
     }
-    await Accounts.findOne({userId:req.userId},
-        {
-            $inc:{
-                balance:-amount
-            }
-        })
-    await Accounts.findOne({userId:to},
-        {
-        $inc:{
-            balance:amount
-        }
-    })
+    await Accounts.findOneAndUpdate(
+        {userId:req.userId},
+        {$inc:{balance:-amount}
+        });
+    await Accounts.findOneAndUpdate(
+        {userId:to},
+        {$inc:{balance:amount}
+    });
     res.status(200).send("Amout send successfully");
 })
 
