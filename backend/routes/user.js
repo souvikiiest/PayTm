@@ -8,32 +8,37 @@ const { AuthMiddleware } = require("../middlewares/AuthMiddlewares");
 const router = express.Router();
 
 router.post('/signup',ValidationCheck, async function(req,res){
-   try{
-    const newUser = new PaytmUser({
-        firstName:req.body.firstName,
-        lastName:req.body.lastName,
-        password:req.body.password,
-        username:req.body.username
-    })
-   const existinguser = await PaytmUser.findOne({username:req.body.username})
-        if(existinguser){
+    try {
+        const newUser = new PaytmUser({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            password: req.body.password,
+            username: req.body.username
+        })
+        const existinguser = await PaytmUser.findOne({ username: req.body.username })
+        if (existinguser) {
             return res.status(411).send("User already taken")
         }
         const savedUser = await newUser.save()
-        const userId = savedUser._id;
-        const token = jwt.sign({userId},JWT_SECRET);
-                res.json({
-                    "message":"User created successfully",
-                    "userId":token
-                })
-            Accounts.create({
-                userId,
-                balance: 1+Math.random()*1000
-            })
-        }
-        catch(err) {
-                    res.send("Error saving to database");
-}
+         const userId = savedUser._id;
+        // const token = jwt.sign({userId},JWT_SECRET);
+        //         res.json({
+        //             "message":"User created successfully",
+        //             "userId":token
+        //         })
+        Accounts.create({
+            userId,
+            balance: 1 + Math.random() * 1000
+        })
+        res.json({
+            "message":"User created successfully"
+        })
+
+    }
+    catch (err) {
+        console.log(err);
+        res.send("Error saving to database");
+    }
 })
 //End of signup route
 router.post("/signin",signInCheck, async (req,res)=>{
@@ -48,8 +53,11 @@ router.post("/signin",signInCheck, async (req,res)=>{
         return res.status(411).send("Invalid password")
     }
     const token = jwt.sign({userId:user._id},JWT_SECRET);
+    //const balance = await Accounts.findOne({userId:user._id})
+
     res.json({
-        "jwt":token
+        "jwt":token,
+        "user":user
     })
 }
 catch(error){
@@ -83,7 +91,7 @@ router.put("/",AuthMiddleware, function (req,res){
 })
 
 router.get("/bulk", async function (req,res){
-    const filter = req.query.filter;
+    const filter = req.query.filter || "";
     const result = await PaytmUser.find({
         $or:[
             {firstName:
