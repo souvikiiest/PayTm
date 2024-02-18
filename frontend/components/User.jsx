@@ -8,7 +8,7 @@ export function User(){
     const [UserArray,setUserArray]=useState([]);
     const [textSearch,setTextSearch]=useState("");
     useEffect(()=>{
-        axios.get("http://localhost:3000/api/v1/user/bulk",{
+        axios.get("transaction-qeuqh1be7-souvikiiests-projects.vercel.app/api/v1/user/bulk",{
             params:{
                 filter:textSearch
             }
