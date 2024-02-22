@@ -17,7 +17,7 @@ export function SendMoney(){
     const [amount,setAmount]=useState("0");
     const transfer = async()=>{
         try{
-            await axios.post("transaction-qeuqh1be7-souvikiiests-projects.vercel.app/api/v1/account/transfer",{
+            await axios.post("http://localhost:3000/api/v1/account/transfer",{
                 to:id,
                 amount:amount
             },{

@@ -10,7 +10,7 @@ export function Dashboard(){
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get("transaction-qeuqh1be7-souvikiiests-projects.vercel.app/api/v1/account/balance", {
+            const response = await axios.get("http://localhost:3000/api/v1/account/balance", {
               headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
               }
